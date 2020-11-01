@@ -2,6 +2,7 @@ node_modules/
 logs/*
 !logs/.gitkeep
 /modules_setting.json
+!http_dash/.gitkeep
 .DS_Store
 ._.DS_Store
 **/.DS_Store
