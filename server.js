@@ -7,7 +7,8 @@ const optionDefinitions = [
   { name: 'port', type: Number, defaultValue: 3000 },
   { name: 'device', type: String },
   { name: 'mpdOutput', type: String },
-  { name: 'cleanup', type: String }
+  { name: 'cleanup', type: String },
+  { name: 'runPort', type: Boolean }
 ]
 const options = commandLineArgs(optionDefinitions)
 //Setting logging option & pretty
@@ -90,7 +91,6 @@ var startServer = function(preset){
 //loading preset
 try {
   if (fs.existsSync(options.preset)) {
-    console.log("sssss")
     var preset = require(options.preset);
     logger.info(`preset loaded, building config...`)
     var ffmpegConfig = preset.build(options.device, options.mpdOutput, options.presetConfig)
@@ -102,7 +102,11 @@ try {
 } catch(err) {
   logger.error(`error loading preset => ${err}`)
 }
-dashServer.listen(options.port, () => {
-  logger.info(`server running on port ${options.port}`)
-  logger.info(`serving static => ${static_folder}`)
-})
+if(options.runPort){
+  dashServer.listen(options.port, () => {
+    logger.info(`server running on port ${options.port}`)
+    logger.info(`serving static => ${static_folder}`)
+  })
+}else{
+  logger.info(`not serving to port, just outputting mpd...`)
+}
